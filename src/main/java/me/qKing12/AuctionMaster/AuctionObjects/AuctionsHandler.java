@@ -94,11 +94,11 @@ public class AuctionsHandler {
                         .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins())));
 
         if (AuctionMaster.plugin.getConfig().getBoolean("broadcast-new-auction")) {
-            if (liteBans && AuctionMaster.plugin.getConfig().getBoolean("lite-bans")) {
+            /*if (liteBans && AuctionMaster.plugin.getConfig().getBoolean("lite-bans")) {
                 boolean isMuted = litebans.api.Database.get().isPlayerMuted(UUID.fromString(auction.getSellerUUID()), p.getAddress().getAddress().getHostAddress());
                 if (isMuted)
                     return true;
-            }
+            }*/
 
             String permission = AuctionMaster.plugin.getConfig().getString("broadcast-new-auction-permission");
             if (permission != null && !permission.equals("") && !permission.equalsIgnoreCase("none") && !p.hasPermission(permission))

@@ -101,7 +101,8 @@ public class ViewAuctionMenu {
             keepUpdated = Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
                 ItemStack getDisplay = auction.getUpdatedDisplay().clone();
                 ItemMeta meta = getDisplay.getItemMeta();
-                meta.setLore(meta.getLore().subList(0, meta.getLore().size() - 2));
+                if (meta.getLore() != null)
+                    meta.setLore(meta.getLore().subList(0, meta.getLore().size() - 2));
                 getDisplay.setItemMeta(meta);
 
                 inventory.setItem(slot, getDisplay);
