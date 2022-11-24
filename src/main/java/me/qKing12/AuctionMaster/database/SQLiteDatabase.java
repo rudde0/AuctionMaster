@@ -6,6 +6,7 @@ import me.qKing12.AuctionMaster.AuctionObjects.AuctionBIN;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionClassic;
 import me.qKing12.AuctionMaster.Utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.inventory.ItemStack;
 
 import java.sql.*;
 import java.time.ZonedDateTime;
@@ -141,7 +142,17 @@ public class SQLiteDatabase implements DatabaseHandler {
                 if (uuid.equalsIgnoreCase("serverCloseDate"))
                     continue;
 
-                AuctionMaster.auctionsHandler.previewItems.put(uuid, Utils.itemFromBase64(resultSet.getString(2)));
+                ItemStack result = Utils.itemFromBase64(resultSet.getString(2));
+
+                if (result == null) {
+                    PreparedStatement stmt = Auctions.prepareStatement("DELETE FROM PreviewData WHERE id = ?");
+                    stmt.setString(1, uuid);
+                    stmt.executeUpdate();
+                    Bukkit.getLogger().warning(uuid + " removed from auctionPreviewItems, itemData: " + resultSet.getString(2));
+                    continue;
+                }
+
+                AuctionMaster.auctionsHandler.previewItems.put(uuid, result);
             }
         } catch (Exception x) {
             x.printStackTrace();
@@ -174,7 +185,8 @@ public class SQLiteDatabase implements DatabaseHandler {
         Bukkit.getScheduler().runTaskAsynchronously(AuctionMaster.plugin, () -> {
             try (
                     Connection Auctions = getConnection();
-                    PreparedStatement stmt1 = Auctions.prepareStatement("INSERT OR IGNORE INTO PreviewData VALUES (?, ?)");
+                    //PreparedStatement stmt1 = Auctions.prepareStatement("INSERT OR IGNORE INTO PreviewData VALUES (?, ?)");
+                    PreparedStatement stmt1 = Auctions.prepareStatement("INSERT INTO PreviewData (item, id) VALUES (?, ?) ON CONFLICT(id) DO UPDATE SET item = ?;");
                     //PreparedStatement stmt2 = Auctions.prepareStatement("INSERT INTO PreviewData VALUES(?, ?)")
 
                     /*
@@ -185,6 +197,7 @@ public class SQLiteDatabase implements DatabaseHandler {
             ) {
                 stmt1.setString(1, item);
                 stmt1.setString(2, player);
+                stmt1.setString(3, item);
                 stmt1.executeUpdate();
                 /*if (updated == 0) {
                     stmt2.setString(1, player);
