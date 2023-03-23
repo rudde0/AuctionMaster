@@ -80,7 +80,8 @@ public class AuctionsHandler {
             auctions.put(auction.getId(), auction);
         } catch (Exception e)
         {
-            p.sendMessage("§cBir şey yanlış gitti! Lütfen tekrar deneyin.");
+            p.sendMessage("§cBir şey yanlış gitti! Lütfen tekrar deneyin. Hata kodu: " + e);
+            e.printStackTrace();
             return false;
         }
 

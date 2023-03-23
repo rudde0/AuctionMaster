@@ -91,8 +91,17 @@ public class CreateAuctionConfirmMenu {
                         status = AuctionMaster.auctionsHandler.createAuction(new AuctionBIN(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
                     else
                         status = AuctionMaster.auctionsHandler.createAuction(new AuctionClassic(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
-                    if (!status)
-                        return;
+
+                    if (!status) {
+                        try {
+                            if (!auctionsHandler.ownAuctions.containsValue(AuctionMaster.auctionsHandler.previewItems.get(player.getUniqueId().toString()))) {
+                                player.sendMessage("An error occured when item putting into auction. Please try again later.");
+                                return;
+                            }
+                        } catch (Exception ex) {
+                            ex.printStackTrace();
+                        }
+                    }
 
                     Utils.playSound(player, "auction-confirm");
                     AuctionMaster.economy.removeMoney(player, fee);
