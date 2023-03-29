@@ -52,7 +52,8 @@ public class BidSelectGUI {
         new AnvilGUI.Builder()
                 .onComplete((target, reply) -> {
                     try{
-                        double bidSelect = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(reply):Math.floor(Double.parseDouble(reply));
+                        double inputArg = Utils.moneyInput(reply);
+                        double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                         if(bidSelect>=minimumBid)
                             new ViewAuctionMenu(target, auction, goBackTo, bidSelect);
                         else
@@ -76,7 +77,8 @@ public class BidSelectGUI {
 
         new ChatListener(p, (reply) -> {
             try{
-                double bidSelect = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(reply):Math.floor(Double.parseDouble(reply));
+                double inputArg = Utils.moneyInput(reply);
+                double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                 if(bidSelect>=minimumBid)
                     new ViewAuctionMenu(p, auction, goBackTo, bidSelect);
                 else

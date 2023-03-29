@@ -48,7 +48,8 @@ public class StartingBidGUI {
         new net.wesjd.anvilgui.AnvilGUI.Builder()
                 .onComplete((target, reply) -> {
                     try{
-                        double timeInput = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(reply):Math.floor(Double.parseDouble(reply));
+                        double inputArg = Utils.moneyInput(reply);
+                        double timeInput = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                         if(timeInput<1){
                             p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("starting-bid-sign-deny")));
                         }

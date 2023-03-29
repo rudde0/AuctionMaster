@@ -1,6 +1,7 @@
 package me.qKing12.AuctionMaster.Menus;
 
 import me.qKing12.AuctionMaster.AuctionMaster;
+import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionBIN;
 import me.qKing12.AuctionMaster.AuctionObjects.AuctionClassic;
 import me.qKing12.AuctionMaster.Utils.Utils;
@@ -13,6 +14,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+
 import java.util.ArrayList;
 
 import static me.qKing12.AuctionMaster.AuctionMaster.*;
@@ -87,23 +90,31 @@ public class CreateAuctionConfirmMenu {
                         duration= AuctionMaster.configLoad.defaultDuration;
 
                     Boolean status;
+                    ItemStack currentPreviewItem = AuctionMaster.auctionsHandler.previewItems.get(uuid);
+                    if (currentPreviewItem == null) return;
                     if (auctionsHandler.buyItNowSelected != null && (configLoad.onlyBuyItNow || ((AuctionMaster.configLoad.defaultBuyItNow && !auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString())) || (!configLoad.defaultBuyItNow && auctionsHandler.buyItNowSelected.contains(player.getUniqueId().toString())))))
-                        status = AuctionMaster.auctionsHandler.createAuction(new AuctionBIN(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
+                        status = AuctionMaster.auctionsHandler.createAuction(new AuctionBIN(player, startingBid, duration, currentPreviewItem));
                     else
-                        status = AuctionMaster.auctionsHandler.createAuction(new AuctionClassic(player, startingBid, duration, AuctionMaster.auctionsHandler.previewItems.get(uuid)));
+                        status = AuctionMaster.auctionsHandler.createAuction(new AuctionClassic(player, startingBid, duration, currentPreviewItem));
+
+                    Utils.playSound(player, "auction-confirm");
 
                     if (!status) {
                         try {
-                            if (!auctionsHandler.ownAuctions.containsValue(AuctionMaster.auctionsHandler.previewItems.get(player.getUniqueId().toString()))) {
-                                player.sendMessage("An error occured when item putting into auction. Please try again later.");
-                                return;
+                            /*boolean auctionItemAdded = false;
+                            for (Auction auction : auctionsHandler.ownAuctions.get(uuid)) {
+                               if (auction.getItemStack().equals(currentPreviewItem) && (auction.getEndingDate() == duration)) {
+                                   auctionItemAdded = true;
+                                   break;
+                               }
                             }
+                            if (!auctionItemAdded) return;*/
+                            return;
                         } catch (Exception ex) {
                             ex.printStackTrace();
                         }
                     }
 
-                    Utils.playSound(player, "auction-confirm");
                     AuctionMaster.economy.removeMoney(player, fee);
                     AuctionMaster.auctionsHandler.previewItems.remove(uuid);
                     AuctionMaster.auctionsDatabase.removePreviewItem(uuid);

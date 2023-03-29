@@ -247,6 +247,36 @@ public class Utils {
         return timp;
     }
 
+    public static double moneyInput(String input) {
+        double money = 0;
+        try {
+            money = Double.parseDouble(input);
+        } catch (NumberFormatException e) {
+            input = input.replace(" ", "");
+            String[] components = {"m", "k"};
+            double side;
+            String[] textParts;
+            for (String component : components) {
+                textParts = input.split(component);
+                try {
+                    side = Double.parseDouble(textParts[0]);
+                    if (component.equals("k")) {
+                        side *= 1000;
+                    } else if (component.equals("m")) {
+                        side *= 1000000;
+                    } else {
+                        return -1;
+                    }
+                    money += side;
+                    input = input.substring(input.indexOf(component)+1);
+                } catch (NumberFormatException ignored) {
+
+                }
+            }
+        }
+        return money;
+    }
+
     public static String getIdF(int x){
         switch(x){
             case 0:

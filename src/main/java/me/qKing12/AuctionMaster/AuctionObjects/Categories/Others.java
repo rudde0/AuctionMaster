@@ -154,6 +154,7 @@ public class Others implements Category{
     }
 
     public boolean addToCategory(Auction auction) {
+        if (auction == null) return false;
         String priority = AuctionMaster.auctionsHandler.checkPriority(auction);
         if (priority.equals("others")) {
             if(!orderedAuctionsBids.contains(auction)) {

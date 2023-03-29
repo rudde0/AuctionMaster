@@ -69,10 +69,6 @@ public class AuctionsHandler {
         if (event.isCancelled())
             return false;
 
-        ArrayList<Auction> auctionList = ownAuctions.getOrDefault(auction.getSellerUUID(), new ArrayList<>());
-        auctionList.add(auction);
-        ownAuctions.put(auction.getSellerUUID(), auctionList);
-
         try {
             AuctionMaster.auctionsDatabase.addToOwnAuctions(auction.getSellerUUID(), auction.getId());
             AuctionMaster.auctionsDatabase.insertAuction(auction);
@@ -84,6 +80,10 @@ public class AuctionsHandler {
             e.printStackTrace();
             return false;
         }
+
+        ArrayList<Auction> auctionList = ownAuctions.getOrDefault(auction.getSellerUUID(), new ArrayList<>());
+        auctionList.add(auction);
+        ownAuctions.put(auction.getSellerUUID(), auctionList);
 
         List<String> broadcastCommands = AuctionMaster.plugin.getConfig().getStringList("broadcast-commands");
         if (!broadcastCommands.isEmpty())

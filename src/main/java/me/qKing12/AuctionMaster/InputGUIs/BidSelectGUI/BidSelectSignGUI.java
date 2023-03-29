@@ -10,6 +10,7 @@ import com.comphenix.protocol.wrappers.BlockPosition;
 import me.qKing12.AuctionMaster.AuctionObjects.Auction;
 import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.ViewAuctionMenu;
+import me.qKing12.AuctionMaster.Utils.Utils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
@@ -102,14 +103,16 @@ public class BidSelectSignGUI {
                     else
                         input = event.getPacket().getStringArrays().read(0)[0];
 
+                    double inputArg = Utils.moneyInput(input);
+
                     Bukkit.getScheduler().runTask(AuctionMaster.plugin, () -> {
                         try{
-                            double bidSelect = AuctionMaster.numberFormatHelper.useDecimals? Double.parseDouble(input):Math.floor(Double.parseDouble(input));
+                            double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                             if(bidSelect>=minimumBid)
                                 new ViewAuctionMenu(p, auction, goBackTo, bidSelect);
                             else
                                 new ViewAuctionMenu(p, auction, goBackTo, 0);
-                        }catch(Exception x){
+                        } catch(Exception x) {
                             p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("edit-bid-deny-message")));
                             new ViewAuctionMenu(p, auction, goBackTo, 0);
                         }
