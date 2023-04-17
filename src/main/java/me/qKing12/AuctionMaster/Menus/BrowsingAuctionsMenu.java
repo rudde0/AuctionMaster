@@ -177,9 +177,8 @@ public class BrowsingAuctionsMenu {
             else if (sortBIN == 1)
                 checkForSort = (auction) -> !auction.isBIN();
             else
-                checkForSort = (auction) -> auction.isBIN();
+                checkForSort = Auction::isBIN;
             if (search != null) {
-                this.search = search;
                 this.search = search.toLowerCase();
             }
             inventory = Bukkit.createInventory(player, 54, utilsAPI.chat(player, AuctionMaster.configLoad.browsingMenuName));
