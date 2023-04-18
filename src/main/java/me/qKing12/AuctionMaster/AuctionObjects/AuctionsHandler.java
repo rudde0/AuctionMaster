@@ -128,7 +128,7 @@ public class AuctionsHandler {
                         .replace("%seller-username%", p.getName())
                         .replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auctionItemName)
                         .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins()))));
-                clickMess.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/ahview " + auction.getId()));
+                clickMess.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/@ahview " + auction.getId()));
                 Bukkit.spigot().broadcast(clickMess);
             }
         }

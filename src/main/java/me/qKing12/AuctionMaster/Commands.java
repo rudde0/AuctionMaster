@@ -26,16 +26,16 @@ import static org.bukkit.Bukkit.getServer;
 public class Commands implements CommandExecutor {
 
     public Commands() {
-        plugin.getCommand("auction").setExecutor(this);
-        plugin.getCommand("ahadmin").setExecutor(this);
-        plugin.getCommand("ahview").setExecutor(this);
+        plugin.getCommand("ah").setExecutor(this);
+        plugin.getCommand("@ahadmin").setExecutor(this);
+        plugin.getCommand("@ahview").setExecutor(this);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if(sender instanceof Player) {
             Player p = (Player) sender;
-            if (cmd.getName().equalsIgnoreCase("auction")) {
+            if (cmd.getName().equalsIgnoreCase("ah")) {
                 String canAuction = plugin.getConfig().getString("auction-use-permission");
                 String canUseCommand = plugin.getConfig().getString("auction-command-use-permission");
 
@@ -87,7 +87,7 @@ public class Commands implements CommandExecutor {
                     return true;
                 }
             }
-            else if (cmd.getName().equalsIgnoreCase("ahview")) {
+            else if (cmd.getName().equalsIgnoreCase("@ahview")) {
                 if(args.length>0){
                     try{
                         Auction auction = auctionsHandler.auctions.get(args[0]);
@@ -101,10 +101,10 @@ public class Commands implements CommandExecutor {
                     }
                 }
             }
-            else if(cmd.getName().equalsIgnoreCase("ahadmin")) {
+            else if(cmd.getName().equalsIgnoreCase("@ahadmin")) {
                 if(!sender.hasPermission(plugin.getConfig().getString("admin-perks-use-permission"))){
                     sender.sendMessage(utilsAPI.chat((Player)sender, plugin.getConfig().getString("admin-perks-deny")));
-                    return true;
+                    return false;
                 }
                 if (args.length > 0) {
                     if(args[0].equalsIgnoreCase("reload")){
@@ -215,7 +215,7 @@ public class Commands implements CommandExecutor {
                             } else
                                 sender.sendMessage(Utils.chat("&cPlease specify an item to give"));
                         }
-                        sender.sendMessage(Utils.chat("&cUsage: /ahadmin give <player> <base64 item>"));
+                        sender.sendMessage(Utils.chat("&cUsage: /@ahadmin give <player> <base64 item>"));
                         return true;
                     }
                     else if (args[0].equalsIgnoreCase("forceopen")) {
@@ -228,7 +228,7 @@ public class Commands implements CommandExecutor {
                             new MainAuctionMenu(p2);
                             sender.sendMessage(Utils.chat("&aMenu forced open!"));
                         } else
-                            sender.sendMessage(Utils.chat("&cUsage: /ahadmin forceopen <player>"));
+                            sender.sendMessage(Utils.chat("&cUsage: /@ahadmin forceopen <player>"));
                         return true;
                     } else if (args.length == 3 && args[0].equalsIgnoreCase("transfer")) {
                         Player p2 = getServer().getPlayer(args[2]);
@@ -242,13 +242,13 @@ public class Commands implements CommandExecutor {
                     }
                     else{
                         p.sendMessage(Utils.chat("&7&m---------------------------------------"));
-                        p.sendMessage(Utils.chat("&c/ahadmin createnpc &8- &7Creates a AuctionMaster NPC"));
-                        p.sendMessage(Utils.chat("&c/ahadmin debugNames &8- &7Debug names of all NPCs"));
-                        p.sendMessage(Utils.chat("&c/ahadmin delivery <player name> &8- &7Open Delivery Menu with a Selected Player"));
-                        p.sendMessage(Utils.chat("&c/ahadmin manage ended &8- &7Open the Manage Auctions Menu for Ended Auctions"));
-                        p.sendMessage(Utils.chat("&c/ahadmin forceopen <player> &8- &7Force opens the auction menu to a player"));
-                        p.sendMessage(Utils.chat("&c/ahadmin reload &8- &7Reloads the plugin"));
-                        p.sendMessage(Utils.chat("&c/ahadmin give <player> <base64 item> &8- &7(Console Only) Advanced command, please read it''s use on spigot page"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin createnpc &8- &7Creates a AuctionMaster NPC"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin debugNames &8- &7Debug names of all NPCs"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin delivery <player name> &8- &7Open Delivery Menu with a Selected Player"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin manage ended &8- &7Open the Manage Auctions Menu for Ended Auctions"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin forceopen <player> &8- &7Force opens the auction menu to a player"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin reload &8- &7Reloads the plugin"));
+                        p.sendMessage(Utils.chat("&c/@ahadmin give <player> <base64 item> &8- &7(Console Only) Advanced command, please read it''s use on spigot page"));
                         p.sendMessage(Utils.chat("&7&m---------------------------------------"));
                     }
                 }
@@ -278,7 +278,7 @@ public class Commands implements CommandExecutor {
                             } else
                                 sender.sendMessage(Utils.chat("&cPlease specify an item to give"));
                         }
-                        sender.sendMessage(Utils.chat("&cUsage: /ahadmin give <player> <base64 item>"));
+                        sender.sendMessage(Utils.chat("&cUsage: /@ahadmin give <player> <base64 item>"));
                         return true;
                     }
                     else if (args[0].equalsIgnoreCase("forceopen")) {
@@ -291,7 +291,7 @@ public class Commands implements CommandExecutor {
                             new MainAuctionMenu(p);
                             sender.sendMessage(Utils.chat("&aMenu forced open!"));
                         } else
-                            sender.sendMessage(Utils.chat("&cUsage: /ahadmin forceopen <player>"));
+                            sender.sendMessage(Utils.chat("&cUsage: /@ahadmin forceopen <player>"));
                         return true;
                     } else if (args.length == 3 && args[0].equalsIgnoreCase("transfer")) {
                         Player p = getServer().getPlayer(args[2]);
@@ -305,8 +305,8 @@ public class Commands implements CommandExecutor {
                     }
                 }
                 sender.sendMessage(Utils.chat("&cOnly commands usable in console:"));
-                sender.sendMessage(Utils.chat("&c/ahadmin give <player> <base64 item>"));
-                sender.sendMessage(Utils.chat("&c/ahadmin forceopen <player>"));
+                sender.sendMessage(Utils.chat("&c/@ahadmin give <player> <base64 item>"));
+                sender.sendMessage(Utils.chat("&c/@ahadmin forceopen <player>"));
             }
         }
 

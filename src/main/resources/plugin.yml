@@ -8,10 +8,9 @@ api-version: "1.13"
 softdepend: [LiteBans, CustomEconomy, Citizens, Vault, PlayerPoints, TokenManager, PlaceholderAPI, Skript, ProtocolLib, HeadDatabase]
 
 commands:
-  auction:
-    aliases: [ah, auctions, auctionhouse, ahouse]
+  ah:
     description: Use this command to open the auction menu.
-  ahview:
+  '@ahview':
     description: View an auction.
-  ahadmin:
-    description: Use this command for admin things.
+  '@ahadmin':
+    description: Opens admin auction manager.
