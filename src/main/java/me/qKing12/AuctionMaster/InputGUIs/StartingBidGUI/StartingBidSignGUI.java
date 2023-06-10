@@ -11,6 +11,7 @@ import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.CreateAuctionMainMenu;
 import me.qKing12.AuctionMaster.Utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -27,34 +28,39 @@ public class StartingBidSignGUI {
 
     private PacketAdapter packetListener;
     private final Player p;
-    private Sign sign;
+    private Location blockLocation;
     private final LeaveListener listener = new LeaveListener();
 
     public StartingBidSignGUI(Player p) {
         this.p=p;
         int x_start = p.getLocation().getBlockX();
-        int y_start = 255;
+        int y_start = p.getLocation().getBlockY() + 7;
         int z_start = p.getLocation().getBlockZ();
 
-        Material material = Material.getMaterial("WALL_SIGN");
-        if (material == null)
-            material = Material.OAK_WALL_SIGN;
+        Material material = Material.OAK_WALL_SIGN;
 
+        int y_min = p.getLocation().getBlockY() - 7;
         while (!p.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(Material.AIR) && !p.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(material)) {
             y_start--;
-            if (y_start == 1)
+            if (y_start <= y_min)
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(material);
-        sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
-
-        ArrayList<String> lines = (ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message");
-        sign.setLine(1, utilsAPI.chat(p, lines.get(0)));
-        sign.setLine(2, utilsAPI.chat(p, lines.get(1)));
-        sign.setLine(3, utilsAPI.chat(p, lines.get(2)));
-
-        sign.update(false, false);
+        this.blockLocation = new Location(p.getWorld(), x_start, y_start, z_start);
+        p.sendBlockChange(blockLocation, material.createBlockData());
+        String[] lines = new String[4];
+        int i = -1;
+        for (String value : AuctionMaster.auctionsManagerCfg.getStringList("starting-bid-sign-message")) {
+            if (i == -1) {
+                if (!value.equals("")) {
+                    lines[0] = "";
+                    i++;
+                }
+            }
+            i++;
+            lines[i] = value;
+        }
+        p.sendSignChange(blockLocation, lines);
 
         PacketContainer openSign = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
         BlockPosition position = new BlockPosition(x_start, y_start, z_start);
@@ -78,7 +84,6 @@ public class StartingBidSignGUI {
             if(e.getPlayer().equals(p)){
                 ProtocolLibrary.getProtocolManager().removePacketListener(packetListener);
                 HandlerList.unregisterAll(this);
-                sign.getBlock().setType(Material.AIR);
             }
         }
     }
@@ -112,7 +117,7 @@ public class StartingBidSignGUI {
                         manager.removePacketListener(this);
                         HandlerList.unregisterAll(listener);
 
-                        sign.getBlock().setType(Material.AIR);
+                        p.sendBlockChange(blockLocation, Material.AIR.createBlockData());
                         new CreateAuctionMainMenu(p);
                     });
                 }

@@ -11,6 +11,7 @@ import me.qKing12.AuctionMaster.AuctionMaster;
 import me.qKing12.AuctionMaster.Menus.AdminMenus.DeliveryHandleMenu;
 import me.qKing12.AuctionMaster.Utils.Utils;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -27,7 +28,7 @@ public class DeliveryCoinsSignGUI {
 
     private PacketAdapter packetListener;
     private final Player p;
-    private Sign sign;
+    private Location blockLocation;
     private final LeaveListener listener = new LeaveListener();
     private final double deliveryCoins;
     private final ArrayList<ItemStack> deliveryItems;
@@ -43,26 +44,26 @@ public class DeliveryCoinsSignGUI {
         this.inventory = inventory;
         this.targetPlayerUUID = targetPlayerUUID;
         int x_start = p.getLocation().getBlockX();
-        int y_start = 255;
+        int y_start = p.getLocation().getBlockY() + 7;
         int z_start = p.getLocation().getBlockZ();
 
-        Material material = Material.getMaterial("WALL_SIGN");
-        if (material == null)
-            material = Material.OAK_WALL_SIGN;
+        Material material = Material.OAK_WALL_SIGN;
 
+        int y_min = p.getLocation().getBlockY() - 7;
         while (!p.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(Material.AIR) && !p.getWorld().getBlockAt(x_start, y_start, z_start).getType().equals(material)) {
             y_start--;
-            if (y_start == 1)
+            if (y_start <= y_min)
                 return;
         }
 
-        p.getWorld().getBlockAt(x_start, y_start, z_start).setType(material);
-        sign = (Sign) p.getWorld().getBlockAt(x_start, y_start, z_start).getState();
-        sign.setLine(1, Utils.chat("^^^^^^^^^^^^^^^"));
-        sign.setLine(2, Utils.chat("Enter amount of"));
-        sign.setLine(3, Utils.chat("coins to deliver"));
-
-        sign.update(false, false);
+        this.blockLocation = new Location(p.getWorld(), x_start, y_start, z_start);
+        p.sendBlockChange(blockLocation, material.createBlockData());
+        String[] lines = new String[4];
+        lines[0] = "";
+        lines[1] = "^^^^^^^^^^";
+        lines[2] = "Enter amount of";
+        lines[3] = "coins to deliver";
+        p.sendSignChange(blockLocation, lines);
 
         PacketContainer openSign = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
         BlockPosition position = new BlockPosition(x_start, y_start, z_start);
@@ -86,7 +87,6 @@ public class DeliveryCoinsSignGUI {
             if (e.getPlayer().equals(p)) {
                 ProtocolLibrary.getProtocolManager().removePacketListener(packetListener);
                 HandlerList.unregisterAll(this);
-                sign.getBlock().setType(Material.AIR);
             }
         }
     }
@@ -106,7 +106,7 @@ public class DeliveryCoinsSignGUI {
                     manager.removePacketListener(this);
                     HandlerList.unregisterAll(listener);
 
-                    sign.getBlock().setType(Material.AIR);
+                    p.sendBlockChange(blockLocation, Material.AIR.createBlockData());
                     try {
                         new DeliveryHandleMenu(p, targetPlayerUUID, Double.parseDouble(input), deliveryItems, send, inventory);
                     } catch (Exception x) {
