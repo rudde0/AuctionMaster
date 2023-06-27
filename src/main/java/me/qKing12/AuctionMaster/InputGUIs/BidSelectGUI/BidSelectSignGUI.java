@@ -72,6 +72,7 @@ public class BidSelectSignGUI {
         PacketContainer openSign = ProtocolLibrary.getProtocolManager().createPacket(PacketType.Play.Server.OPEN_SIGN_EDITOR);
         BlockPosition position = new BlockPosition(x_start, y_start, z_start);
         openSign.getBlockPositionModifier().write(0, position);
+        openSign.getBooleans().write(0, true);
 
         Bukkit.getScheduler().runTaskLater(AuctionMaster.plugin, () -> {
             try {
