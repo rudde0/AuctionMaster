@@ -110,13 +110,16 @@ public class AuctionsHandler {
                 char [] auctionItemNameStripped = ChatColor.stripColor(auction.getDisplayName()).toCharArray();
                 String auctionItemName = auction.getDisplayName();
                 char [] colorChars = {'0','1','2','3','4','5','6','7','8','9','a','b','c','d','e','f','n','m','o','l','u','k'};
+                int auctionItemNameLength = auctionItemNameStripped.length;
 
-                for (int i = 0; i < auctionItemNameStripped.length; i++) {
-                    if (auctionItemNameStripped[i] == '&') {
-                        for (char value : colorChars) {
-                            if (auctionItemNameStripped[i+1] == value) {
-                                auctionItemName = auctionItemName.replace("&" + value, "");
-                                break;
+                if (auctionItemNameLength >= 2) {
+                    for (int i = 0; i < auctionItemNameLength; i++) {
+                        if (auctionItemNameStripped[i] == '&') {
+                            for (char value : colorChars) {
+                                if (auctionItemNameStripped[i + 1] == value) {
+                                    auctionItemName = auctionItemName.replace("&" + value, "");
+                                    break;
+                                }
                             }
                         }
                     }
