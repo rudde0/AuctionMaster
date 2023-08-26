@@ -79,7 +79,6 @@ public class CreateAuctionConfirmMenu {
                     if(singleClick)
                         return;
                     singleClick=true;
-                    player.closeInventory();
 
                     String uuid = player.getUniqueId().toString();
                     double startingBid = AuctionMaster.auctionsHandler.startingBid.getOrDefault(uuid, AuctionMaster.configLoad.defaultStartingBid);
@@ -99,7 +98,13 @@ public class CreateAuctionConfirmMenu {
 
                     Utils.playSound(player, "auction-confirm");
 
+                    if(AuctionMaster.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString()))
+                        new ManageOwnAuctionsMenu(player, 1);
+                    else
+                        player.closeInventory();
+
                     if (!status) {
+
                         try {
                             /*boolean auctionItemAdded = false;
                             for (Auction auction : auctionsHandler.ownAuctions.get(uuid)) {

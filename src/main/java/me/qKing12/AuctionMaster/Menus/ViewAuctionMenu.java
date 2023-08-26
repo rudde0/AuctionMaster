@@ -407,7 +407,10 @@ public class ViewAuctionMenu {
                                 if(auction.forceEnd()) {
                                     Utils.injectToLog("[Player Force End] Auction with ID=" + auction.getId() + " was ended by seller " + player.getName());
                                     player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
-                                    player.closeInventory();
+                                    if(AuctionMaster.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString()))
+                                        new ManageOwnAuctionsMenu(player, 1);
+                                    else
+                                        player.closeInventory();
                                 }
                             }
                             else{
@@ -508,7 +511,10 @@ public class ViewAuctionMenu {
                                 if(auction.forceEnd()) {
                                     Utils.injectToLog("[Player Force End] Auction with ID=" + auction.getId() + " was ended by seller " + player.getName());
                                     player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("end-own-auction-message")));
-                                    player.closeInventory();
+                                    if(AuctionMaster.auctionsHandler.ownAuctions.containsKey(player.getUniqueId().toString()))
+                                        new ManageOwnAuctionsMenu(player, 1);
+                                    else
+                                        player.closeInventory();
                                 }
                             }
                             else{
