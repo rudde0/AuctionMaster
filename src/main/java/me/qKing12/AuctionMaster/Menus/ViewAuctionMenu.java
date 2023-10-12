@@ -34,7 +34,6 @@ public class ViewAuctionMenu {
     private Auction auction;
     private boolean ownAuction;
     private double bidAmount;
-    private boolean hasCoins;
     private double amountToSkip=0;
 
     private int cacheBids;
@@ -175,7 +174,7 @@ public class ViewAuctionMenu {
         else{
             clickCase=4;
             if(bid==null){
-                if(hasCoins= AuctionMaster.economy.hasMoney(player, bidAmount)) {
+                if(AuctionMaster.economy.hasMoney(player, bidAmount)) {
                     for (String line : AuctionMaster.configLoad.submitBidLoreNoPreviousBids)
                         lore.add(utilsAPI.chat(player, line
                                 .replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
@@ -190,7 +189,7 @@ public class ViewAuctionMenu {
             }
             else{
                 amountToSkip=bidAmount-bid.getCoins();
-                if(hasCoins= AuctionMaster.economy.hasMoney(player, amountToSkip)) {
+                if(AuctionMaster.economy.hasMoney(player, bidAmount)) {
                     for (String line : AuctionMaster.configLoad.submitBidLoreWithPreviousBids)
                         lore.add(utilsAPI.chat(player, line
                                 .replace("%bid-amount%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
@@ -207,7 +206,7 @@ public class ViewAuctionMenu {
                 lore.add("");
                 lore.add(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("own-auction-message")));
             }
-            if(hasCoins) {
+            if(AuctionMaster.economy.hasMoney(player, bidAmount)) {
                 toSubmitSlot = itemConstructor.getItem(AuctionMaster.configLoad.submitBidMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.submitBidName), lore);
                 toSubmitSlot.setAmount(2);
             }
@@ -243,7 +242,7 @@ public class ViewAuctionMenu {
         }
         else{
             clickCase=4;
-            if(hasCoins= AuctionMaster.economy.hasMoney(player, bidAmount)) {
+            if(AuctionMaster.economy.hasMoney(player, bidAmount)) {
                 for (String line : configLoad.submitBuyLore)
                     lore.add(utilsAPI.chat(player, line
                             .replace("%price%", AuctionMaster.numberFormatHelper.formatNumber(bidAmount))
@@ -259,7 +258,7 @@ public class ViewAuctionMenu {
                 lore.add("");
                 lore.add(utilsAPI.chat(player, AuctionMaster.bidsRelatedCfg.getString("own-auction-message")));
             }
-            if(hasCoins) {
+            if(AuctionMaster.economy.hasMoney(player, bidAmount)) {
                 toSubmitSlot = itemConstructor.getItem(AuctionMaster.configLoad.submitBuyMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.submitBuyName), lore);
                 toSubmitSlot.setAmount(2);
             }
@@ -427,7 +426,7 @@ public class ViewAuctionMenu {
 
                         Utils.playSound(player, "auction-submit-bid");
                         if(clickCase==4){
-                            if(ownAuction || !hasCoins) {
+                            if(ownAuction || !AuctionMaster.economy.hasMoney(player, bidAmount)) {
                                 singleClick = false;
                                 return;
                             }
@@ -531,7 +530,7 @@ public class ViewAuctionMenu {
 
                         Utils.playSound(player, "auction-submit-bid");
                         if(clickCase==4){
-                            if(ownAuction || !hasCoins) {
+                            if(ownAuction || !AuctionMaster.economy.hasMoney(player, bidAmount)) {
                                 singleClick = false;
                                 return;
                             }
