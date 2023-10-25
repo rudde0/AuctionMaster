@@ -3,6 +3,7 @@ package me.qKing12.AuctionMaster.AuctionObjects;
 import me.qKing12.AuctionMaster.API.Events.AuctionCreateEvent;
 import me.qKing12.AuctionMaster.AuctionObjects.Categories.*;
 import me.qKing12.AuctionMaster.AuctionMaster;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
@@ -70,10 +71,18 @@ public class AuctionsHandler {
             return false;
 
         try {
-            AuctionMaster.auctionsDatabase.addToOwnAuctions(auction.getSellerUUID(), auction.getId());
-            AuctionMaster.auctionsDatabase.insertAuction(auction);
             addToBrowse(auction);
             auctions.put(auction.getId(), auction);
+        } catch (Exception e)
+        {
+            p.sendMessage("§cBir şey yanlış gitti! Lütfen tekrar deneyin. Hata kodu: " + e);
+            e.printStackTrace();
+            return false;
+        }
+
+        try {
+            AuctionMaster.auctionsDatabase.addToOwnAuctions(auction.getSellerUUID(), auction.getId());
+            AuctionMaster.auctionsDatabase.insertAuction(auction);
         } catch (Exception e)
         {
             p.sendMessage("§cBir şey yanlış gitti! Lütfen tekrar deneyin. Hata kodu: " + e);
@@ -126,14 +135,16 @@ public class AuctionsHandler {
                     }
                 }
 
-                TextComponent clickMess = new TextComponent();
-                clickMess.setText(utilsAPI.chat(p, newAuctionMessage
-                        .replace("%seller-displayname%", p.getDisplayName())
+                BaseComponent[] clickMess = TextComponent.fromLegacyText(utilsAPI.chat(p, newAuctionMessage
                         .replace("%seller-username%", p.getName())
-                        .replace("%seller-display-name%", p.getDisplayName()).replace("%item-display-name%", auctionItemName)
+                        .replace("%seller-display-name%", p.getDisplayName())
+                        .replace("%item-display-name%", auctionItemName)
                         .replace("%coins%", AuctionMaster.numberFormatHelper.formatNumber(auction.getCoins()))));
-                clickMess.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/@ahview " + auction.getId()));
-                Bukkit.spigot().broadcast(clickMess);
+
+                TextComponent broadcast = new TextComponent(clickMess);
+
+                broadcast.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/@ahview " + auction.getId()));
+                Bukkit.spigot().broadcast(broadcast);
             }
         }
 
