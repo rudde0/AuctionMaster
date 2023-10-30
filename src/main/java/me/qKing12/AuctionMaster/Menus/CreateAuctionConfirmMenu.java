@@ -76,6 +76,10 @@ public class CreateAuctionConfirmMenu {
                     new CreateAuctionMainMenu(player);
                 }
                 else if (e.getSlot() == AuctionMaster.menusCfg.getInt("create-auction-confirm-menu.confirm-item-slot")){
+                    if(!AuctionMaster.economy.hasMoney(player, fee)) {
+                        new CreateAuctionMainMenu(player);
+                        return;
+                    }
                     if(singleClick)
                         return;
                     singleClick=true;
