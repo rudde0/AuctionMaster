@@ -12,7 +12,6 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -45,21 +44,23 @@ public class ViewShulkerContentMenu {
 
         Utils.playSound(player, "auction-view-menu-open");
 
-        BlockStateMeta bsm = (BlockStateMeta) shulker.getItemMeta();
-        assert bsm != null;
-        ShulkerBox shulkerBox = (ShulkerBox) bsm.getBlockState();
-        inventory.setContents(shulkerBox.getInventory().getContents());
+        Bukkit.getScheduler().runTaskTimerAsynchronously(AuctionMaster.plugin, () -> {
+            BlockStateMeta bsm = (BlockStateMeta) shulker.getItemMeta();
+            assert bsm != null;
+            ShulkerBox shulkerBox = (ShulkerBox) bsm.getBlockState();
+            inventory.setContents(shulkerBox.getInventory().getContents());
 
-        if (AuctionMaster.configLoad.useBackgoundGlass)
-            for (int i = 27; i <= 35; i++) {
-                inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
-            }
+            if (AuctionMaster.configLoad.useBackgoundGlass)
+                for (int i = 27; i <= 35; i++) {
+                    inventory.setItem(i, AuctionMaster.configLoad.backgroundGlass.clone());
+                }
 
 
-        ArrayList<String> lore = new ArrayList<>();
-        for (String line : AuctionMaster.configLoad.goBackLore)
-            lore.add(utilsAPI.chat(player, line));
-        inventory.setItem(AuctionMaster.menusCfg.getInt("view-shulker-content-menu.go-back-slot"), itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
+            ArrayList<String> lore = new ArrayList<>();
+            for (String line : AuctionMaster.configLoad.goBackLore)
+                lore.add(utilsAPI.chat(player, line));
+            inventory.setItem(AuctionMaster.menusCfg.getInt("view-shulker-content-menu.go-back-slot"), itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
+        }, 0, 0);
 
         Bukkit.getPluginManager().registerEvents(new ClickListen(), AuctionMaster.plugin);
         player.openInventory(inventory);
