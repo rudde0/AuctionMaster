@@ -35,6 +35,7 @@ public class ViewAuctionMenu {
     private boolean ownAuction;
     private double bidAmount;
     private double amountToSkip=0;
+    private final int slot = AuctionMaster.menusCfg.getInt("view-auction-menu.auction-display-slot");
 
     private int cacheBids;
 
@@ -92,7 +93,6 @@ public class ViewAuctionMenu {
         if (inventory == null)
             return;
 
-        final int slot= AuctionMaster.menusCfg.getInt("view-auction-menu.auction-display-slot");
         if (slot < 0)
             return;
 
@@ -371,6 +371,13 @@ public class ViewAuctionMenu {
             lore.add(utilsAPI.chat(player, line));
         inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.go-back-slot"), itemConstructor.getItem(AuctionMaster.configLoad.goBackMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.goBackName), lore));
 
+        if (auction.getItemStack().getType().toString().endsWith("SHULKER_BOX") && AuctionMaster.menusCfg.getBoolean("view-auction-menu.if-shulker.notify")) {
+            ArrayList<String> loreShulker = new ArrayList<>();
+            for (String line : AuctionMaster.configLoad.shulkerNotifierLore)
+                loreShulker.add(utilsAPI.chat(player, line));
+            inventory.setItem(AuctionMaster.menusCfg.getInt("view-auction-menu.if-shulker.slot"), itemConstructor.getItem(AuctionMaster.configLoad.shulkerNotifierMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.shulkerNotifierName), loreShulker));
+        }
+
         Bukkit.getPluginManager().registerEvents(auction.isBIN() ? new ClickListenBIN() : new ClickListen(), AuctionMaster.plugin);
         player.openInventory(inventory);
         keepUpdated();
@@ -394,6 +401,10 @@ public class ViewAuctionMenu {
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
                         if(player.hasPermission("auctionmaster.admin"))
                             new ViewAuctionAdminMenu(player, auction, goBackTo);
+                    }
+                    else if(e.getSlot()== slot){
+                        if (auction.getItemStack().getType().toString().endsWith("SHULKER_BOX"))
+                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if (singleClick)
@@ -498,6 +509,10 @@ public class ViewAuctionMenu {
                     else if(e.getSlot()== AuctionMaster.menusCfg.getInt("view-auction-menu.admin-view-slot")){
                         if(player.hasPermission("auctionmaster.admin"))
                             new ViewAuctionAdminMenu(player, auction, goBackTo);
+                    }
+                    else if(e.getSlot()== slot){
+                        if (auction.getItemStack().getType().toString().endsWith("SHULKER_BOX"))
+                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if (singleClick)

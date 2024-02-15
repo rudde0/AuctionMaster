@@ -116,7 +116,7 @@ public class SelectDurationSignGUI {
                                 }
                             }
                             else{
-                                if(timeInput>168 || timeInput<1){
+                                if(timeInput>332 || timeInput<1){
                                     p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("duration-sign-deny")));
                                 }
                                 else{

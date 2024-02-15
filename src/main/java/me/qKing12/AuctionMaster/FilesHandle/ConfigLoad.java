@@ -60,11 +60,14 @@ public class ConfigLoad {
     public ArrayList<String> closeMenuLore;
     public ItemStack closeMenuMaterial;
 
+    public String shulkerNotifierName;
+    public ArrayList<String> shulkerNotifierLore;
     public String goBackName;
     public String goNextName;
     public ArrayList<String> goBackLore;
     public ArrayList<String> goNextLore;
     public ItemStack goBackMaterial;
+    public ItemStack shulkerNotifierMaterial;
     public ItemStack goNextMaterial;
 
     public String nextPageName;
@@ -212,6 +215,7 @@ public class ConfigLoad {
     public int durationMenuSize;
 
     public String viewAuctionMenuName;
+    public String viewShulkerContentMenuName;
     public int viewAuctionMenuSize;
 
     public ItemStack bidHistoryDefaultItem;
@@ -436,6 +440,10 @@ public class ConfigLoad {
         goNextLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("go-next-item-lore");
         goBackMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("go-back-item"));
         goNextMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.plugin.getConfig().getString("go-next-item"));
+
+        shulkerNotifierName= AuctionMaster.menusCfg.getString("view-auction-menu.if-shulker.name");
+        shulkerNotifierLore=(ArrayList<String>) AuctionMaster.menusCfg.getStringList("view-auction-menu.if-shulker.lore");
+        shulkerNotifierMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.menusCfg.getString("view-auction-menu.if-shulker.showcase-item"));
 
         previousPageName= AuctionMaster.plugin.getConfig().getString("previous-page-item-name");
         previousPageLore=(ArrayList<String>) AuctionMaster.plugin.getConfig().getStringList("previous-page-item-lore");
@@ -665,6 +673,7 @@ public class ConfigLoad {
         searchItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("search-auction-item"));
 
         viewAuctionMenuName= AuctionMaster.bidsRelatedCfg.getString("bids-menu-name");
+        viewShulkerContentMenuName= AuctionMaster.bidsRelatedCfg.getString("view-shulker-menu-name");
         viewAuctionMenuSize= AuctionMaster.menusCfg.getInt("view-auction-menu.size");
 
         editBidMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.bidsRelatedCfg.getString("edit-bid-item"));
