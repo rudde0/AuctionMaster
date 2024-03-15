@@ -114,12 +114,12 @@ public class BidSelectSignGUI {
                         try{
                             double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                             if(bidSelect>=minimumBid)
-                                new ViewAuctionMenu(p, auction, goBackTo, bidSelect);
+                                new ViewAuctionMenu(p, auction, goBackTo, bidSelect, null);
                             else
-                                new ViewAuctionMenu(p, auction, goBackTo, 0);
+                                new ViewAuctionMenu(p, auction, goBackTo, 0, null);
                         } catch(Exception x) {
                             p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("edit-bid-deny-message")));
-                            new ViewAuctionMenu(p, auction, goBackTo, 0);
+                            new ViewAuctionMenu(p, auction, goBackTo, 0, null);
                         }
 
                         manager.removePacketListener(this);

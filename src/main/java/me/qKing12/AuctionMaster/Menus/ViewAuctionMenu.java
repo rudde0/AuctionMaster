@@ -30,6 +30,7 @@ public class ViewAuctionMenu {
     private Inventory inventory;
     private Player player;
     private String goBackTo;
+    private String searchParam;
     private BukkitTask keepUpdated;
     private Auction auction;
     private boolean ownAuction;
@@ -78,7 +79,7 @@ public class ViewAuctionMenu {
             player.closeInventory();
         }
         else if(goBackTo.startsWith("browsing_")){
-            new BrowsingAuctionsMenu(player, goBackTo.replace("browsing_", ""), 0, null);
+            new BrowsingAuctionsMenu(player, goBackTo.replace("browsing_", ""), 0, searchParam);
         }
         else{
             try {
@@ -285,7 +286,7 @@ public class ViewAuctionMenu {
         }
     }
 
-    public ViewAuctionMenu(Player player, Auction auction, String goBackTo, double bidAmount){
+    public ViewAuctionMenu(Player player, Auction auction, String goBackTo, double bidAmount, String searchParam){
         String canAuction = plugin.getConfig().getString("auction-use-permission");
         if(!canAuction.equals("none") && !player.hasPermission(canAuction)){
             player.sendMessage(utilsAPI.chat(player, plugin.getConfig().getString("auction-no-permission")));
@@ -295,6 +296,7 @@ public class ViewAuctionMenu {
         this.player = player;
         this.goBackTo = goBackTo;
         this.auction = auction;
+        this.searchParam = searchParam;
         this.cacheBids = auction.getBids().getNumberOfBids();
         inventory = Bukkit.createInventory(player, AuctionMaster.configLoad.viewAuctionMenuSize, utilsAPI.chat(player, AuctionMaster.configLoad.viewAuctionMenuName));
 
@@ -404,7 +406,7 @@ public class ViewAuctionMenu {
                     }
                     else if(e.getSlot()== slot){
                         if (auction.getItemStack().getType().toString().endsWith("SHULKER_BOX"))
-                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo);
+                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo, searchParam);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if (singleClick)
@@ -512,7 +514,7 @@ public class ViewAuctionMenu {
                     }
                     else if(e.getSlot()== slot){
                         if (auction.getItemStack().getType().toString().endsWith("SHULKER_BOX"))
-                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo);
+                            new ViewShulkerContentMenu(player, auction.getItemStack(), auction, goBackTo, searchParam);
                     }
                     else if(e.getSlot()==menusCfg.getInt("view-auction-menu.end-own-auction-slot")){
                         if (singleClick)
@@ -569,7 +571,7 @@ public class ViewAuctionMenu {
 
                                         String bidder = auction.getBids().getTopBid();
                                         if (!auction.placeBid(player, bidAmount, cacheBids)) {
-                                            new ViewAuctionMenu(player, auction, goBackTo, 0);
+                                            new ViewAuctionMenu(player, auction, goBackTo, 0, null);
                                             for (String line : AuctionMaster.bidsRelatedCfg.getStringList("bid-error-message")) {
                                                 player.sendMessage(utilsAPI.chat(player, line));
                                             }

@@ -55,12 +55,12 @@ public class BidSelectGUI {
                         double inputArg = Utils.moneyInput(reply);
                         double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                         if(bidSelect>=minimumBid)
-                            new ViewAuctionMenu(target, auction, goBackTo, bidSelect);
+                            new ViewAuctionMenu(target, auction, goBackTo, bidSelect, null);
                         else
-                            new ViewAuctionMenu(target, auction, goBackTo, 0);
+                            new ViewAuctionMenu(target, auction, goBackTo, 0, null);
                     }catch(Exception x){
                         target.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("edit-bid-deny-message")));
-                        new ViewAuctionMenu(target, auction, goBackTo, 0);
+                        new ViewAuctionMenu(target, auction, goBackTo, 0, null);
                     }
 
                     return net.wesjd.anvilgui.AnvilGUI.Response.close();
@@ -80,12 +80,12 @@ public class BidSelectGUI {
                 double inputArg = Utils.moneyInput(reply);
                 double bidSelect = AuctionMaster.numberFormatHelper.useDecimals ? inputArg : Math.floor(inputArg);
                 if(bidSelect>=minimumBid)
-                    new ViewAuctionMenu(p, auction, goBackTo, bidSelect);
+                    new ViewAuctionMenu(p, auction, goBackTo, bidSelect, null);
                 else
-                    new ViewAuctionMenu(p, auction, goBackTo, 0);
+                    new ViewAuctionMenu(p, auction, goBackTo, 0, null);
             }catch(Exception x){
                 p.sendMessage(utilsAPI.chat(p, AuctionMaster.auctionsManagerCfg.getString("edit-bid-deny-message")));
-                new ViewAuctionMenu(p, auction, goBackTo, 0);
+                new ViewAuctionMenu(p, auction, goBackTo, 0, null);
             }
 
         });

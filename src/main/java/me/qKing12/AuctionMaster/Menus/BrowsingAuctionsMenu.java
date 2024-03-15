@@ -328,7 +328,7 @@ public class BrowsingAuctionsMenu {
                         }
                     }
                     else if(auctions.containsKey(e.getSlot())){
-                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), "browsing_"+categoryString, 0);
+                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), "browsing_"+categoryString, 0, search);
                     }
                 }
             }

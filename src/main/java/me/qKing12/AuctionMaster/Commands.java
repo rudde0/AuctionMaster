@@ -89,7 +89,7 @@ public class Commands implements CommandExecutor {
                             p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
                             return true;
                         }
-                        new ViewAuctionMenu(p, AuctionMaster.auctionsHandler.auctions.get(args[0]), "Close", 0);
+                        new ViewAuctionMenu(p, AuctionMaster.auctionsHandler.auctions.get(args[0]), "Close", 0, null);
                     } catch (Exception x) {
                         p.sendMessage(utilsAPI.chat(p, AuctionMaster.bidsRelatedCfg.getString("too-late-to-open-now")));
                     }

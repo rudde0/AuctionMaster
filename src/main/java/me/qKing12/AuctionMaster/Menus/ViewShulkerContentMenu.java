@@ -25,6 +25,7 @@ public class ViewShulkerContentMenu {
     private final Inventory inventory;
     private final Player player;
     private final String goBackTo;
+    private final String searchParam;
     private final Auction auction;
 
     private void goBack(){
@@ -33,12 +34,13 @@ public class ViewShulkerContentMenu {
                 player.closeInventory();
             return;
         }
-        new ViewAuctionMenu(player, auction, goBackTo, 0);
+        new ViewAuctionMenu(player, auction, goBackTo, 0, searchParam);
     }
 
-    public ViewShulkerContentMenu(Player player, ItemStack shulker, Auction auction, String goBackTo){
+    public ViewShulkerContentMenu(Player player, ItemStack shulker, Auction auction, String goBackTo, String searchParam){
         this.player = player;
         this.goBackTo = goBackTo;
+        this.searchParam = searchParam;
         this.auction = auction;
         inventory = Bukkit.createInventory(player, 36, utilsAPI.chat(player, AuctionMaster.configLoad.viewShulkerContentMenuName));
 

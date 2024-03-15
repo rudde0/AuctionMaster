@@ -154,7 +154,7 @@ public class ViewPlayerAuctions {
                         new ViewPlayerAuctions(player, uuid, pageNumber + 1);
                     }
                     else if(auctions.containsKey(e.getSlot())){
-                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), uuid, 0);
+                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), uuid, 0, null);
                     }
                 }
             }

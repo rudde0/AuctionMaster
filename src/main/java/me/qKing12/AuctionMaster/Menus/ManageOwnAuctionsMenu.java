@@ -213,7 +213,7 @@ public class ManageOwnAuctionsMenu {
                             return;
                         singleClick = true;
 
-                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), "ownAuction", 0);
+                        new ViewAuctionMenu(player, auctions.get(e.getSlot()), "ownAuction", 0, null);
                     }
                 }
             }
