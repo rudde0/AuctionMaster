@@ -286,6 +286,10 @@ public class ViewAuctionMenu {
         }
     }
 
+    public ViewAuctionMenu(Player player, Auction auction, String goBackTo, double bidAmount) {
+        new ViewAuctionMenu(player, auction, goBackTo, bidAmount, null);
+    }
+
     public ViewAuctionMenu(Player player, Auction auction, String goBackTo, double bidAmount, String searchParam){
         String canAuction = plugin.getConfig().getString("auction-use-permission");
         if(!canAuction.equals("none") && !player.hasPermission(canAuction)){
