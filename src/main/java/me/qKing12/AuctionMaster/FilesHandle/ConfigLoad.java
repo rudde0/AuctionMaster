@@ -205,6 +205,7 @@ public class ConfigLoad {
 
     public String searchItemName;
     public ArrayList<String> searchItemLore;
+    public ArrayList<String> searchItemLoreIfSet;
     public ItemStack searchItemMaterial;
 
     public String manageOwnAuctionsMenuName;
@@ -670,6 +671,7 @@ public class ConfigLoad {
 
         searchItemName= AuctionMaster.auctionsManagerCfg.getString("search-auction-item-name");
         searchItemLore=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("search-auction-item-lore");
+        searchItemLoreIfSet=(ArrayList<String>) AuctionMaster.auctionsManagerCfg.getStringList("search-auction-item-lore-if-set");
         searchItemMaterial= AuctionMaster.itemConstructor.getItemFromMaterial(AuctionMaster.auctionsManagerCfg.getString("search-auction-item"));
 
         viewAuctionMenuName= AuctionMaster.bidsRelatedCfg.getString("bids-menu-name");

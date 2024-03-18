@@ -69,6 +69,12 @@ sort-auction-item-sorting:
 
 search-auction-item: '323'
 search-auction-item-name: '&aSearch'
+search-auction-item-lore-if-set:
+  - ''
+  - 'Query: &b%search-query%'
+  - ''
+  - '&cClick right to delete query!'
+  - '&eClick let for new search!'
 search-auction-item-lore:
   - '&7Find items by name.'
   - ''

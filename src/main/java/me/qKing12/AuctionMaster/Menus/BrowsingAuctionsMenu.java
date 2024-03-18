@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
@@ -209,8 +210,13 @@ public class BrowsingAuctionsMenu {
             loadCategories();
 
             ArrayList<String> lore = new ArrayList<>();
-            for (String line : AuctionMaster.configLoad.searchItemLore)
-                lore.add(utilsAPI.chat(player, line));
+            if (search != null) {
+                for (String line : AuctionMaster.configLoad.searchItemLoreIfSet)
+                    lore.add(utilsAPI.chat(player, line.replace("%search-query%", search)));
+            } else {
+                for (String line : AuctionMaster.configLoad.searchItemLore)
+                    lore.add(utilsAPI.chat(player, line));
+            }
             if (AuctionMaster.configLoad.browsingSearchSlot>=0)
                 inventory.setItem(AuctionMaster.configLoad.browsingSearchSlot, itemConstructor.getItem(AuctionMaster.configLoad.searchItemMaterial, utilsAPI.chat(player, AuctionMaster.configLoad.searchItemName), lore));
 
@@ -240,7 +246,11 @@ public class BrowsingAuctionsMenu {
                 if(e.getClickedInventory().equals(inventory)) {
                     if(e.getSlot()==AuctionMaster.configLoad.browsingSearchSlot){
                         Utils.playSound(player, "search-item-click");
-                        SearchGUI.searchFor.openGUI(player, categoryString);
+                        if (search != null && e.getClick().equals(ClickType.RIGHT)) {
+                            new BrowsingAuctionsMenu(player, categoryString, page, null);
+                        } else {
+                            SearchGUI.searchFor.openGUI(player, categoryString);
+                        }
                     }
                     else if(e.getSlot()==AuctionMaster.configLoad.browsingPreviousPage){
                         if(!e.getCurrentItem().equals(category.getBackgroundGlass())){

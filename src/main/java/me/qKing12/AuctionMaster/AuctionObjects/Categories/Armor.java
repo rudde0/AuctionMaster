@@ -169,7 +169,7 @@ public class Armor implements Category{
         }
 
         String checkMaterial = auction.getItemStack().getType().toString();
-        if(checkMaterial.contains("BOOTS") || checkMaterial.contains("LEGGINGS") || checkMaterial.contains("CHESTPLATE") || checkMaterial.contains("HELMET")) {
+        if(checkMaterial.contains("BOOTS") || checkMaterial.contains("LEGGINGS") || checkMaterial.contains("CHESTPLATE") || checkMaterial.contains("HELMET") || checkMaterial.equals("ELYTRA")) {
             if(!orderedAuctionsBids.contains(auction)) {
                 orderedAuctionsBids.add(auction);
                 orderedAuctionsMoney.add(auction);
