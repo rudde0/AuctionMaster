@@ -79,7 +79,15 @@ public class ViewAuctionMenu {
             player.closeInventory();
         }
         else if(goBackTo.startsWith("browsing_")){
-            new BrowsingAuctionsMenu(player, goBackTo.replace("browsing_", ""), 0, searchParam);
+            int page = goBackTo.indexOf("*");
+            if (page != -1) {
+                page = Integer.parseInt(goBackTo.substring(page+1));
+                goBackTo = goBackTo.substring(9, goBackTo.indexOf("*"));
+            } else {
+                page = 0;
+                goBackTo = goBackTo.replace("browsing_", "");
+            }
+            new BrowsingAuctionsMenu(player, goBackTo, page, searchParam);
         }
         else{
             try {
